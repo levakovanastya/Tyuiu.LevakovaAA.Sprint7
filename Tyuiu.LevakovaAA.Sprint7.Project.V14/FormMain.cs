@@ -1,7 +1,8 @@
-﻿using System.Text;
-using System.Windows.Forms;
+﻿using Microsoft.VisualBasic.FileIO;
 using System;
-using Microsoft.VisualBasic.FileIO;
+using System.Text;
+using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
 {
@@ -165,6 +166,81 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
         {
             if (total == 0) return "0.0";
             return ((double)count / total * 100).ToString("F1");
+        }
+
+        private void ShowChartFromDataGridView()
+        {
+            if (dataGridViewRoutes_LAA.Rows.Count == 0)
+            {
+                MessageBox.Show("Нет данных в таблице");
+                return;
+            }
+            Chart chart = new Chart();
+            chart.Size = new Size(500, 300);
+            chart.Location = new Point(200, 50);
+            ChartArea area = new ChartArea();
+            chart.ChartAreas.Add(area);
+            var counts = new Dictionary<string, int>();
+            foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
+            {
+                if (!row.IsNewRow && row.Cells[0].Value != null)
+                {
+                    string type = row.Cells[0].Value.ToString();
+                    if (counts.ContainsKey(type))
+                        counts[type]++;
+                    else
+                        counts[type] = 1;
+                }
+            }
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Column;
+
+            foreach (var item in counts)
+            {
+                series.Points.AddXY(item.Key, item.Value);
+            }
+
+            chart.Series.Add(series);
+            this.Controls.Add(chart);
+        }
+        private void buttonGraf_Click(object sender, EventArgs e)
+        {
+
+            if (chart.Series.Count > 0)
+            {
+                chart.Series.Clear();
+            }
+            Series newSeries = new Series("TransportData");
+            newSeries.ChartType = SeriesChartType.Pie;
+            newSeries.Points.AddXY("Автобус", 2);
+            newSeries.Points.AddXY("Трамвай", 1);
+            newSeries.Points.AddXY("Маршрутка", 1);
+            newSeries.Points.AddXY("Метро", 1);
+            newSeries.Points.AddXY("Электричка", 2);
+            newSeries.IsValueShownAsLabel = true;
+            newSeries.Label = "#VALX"; 
+            newSeries.LabelForeColor = Color.White;
+            newSeries.Font = new Font("Arial", 12, FontStyle.Bold);
+            newSeries["PieLabelStyle"] = "Outside"; 
+            newSeries.Points[0].Color = Color.FromArgb(255, 99, 132);   
+            newSeries.Points[1].Color = Color.FromArgb(54, 162, 235);   
+            newSeries.Points[2].Color = Color.FromArgb(255, 205, 86);   
+            newSeries.Points[3].Color = Color.FromArgb(75, 192, 192);   
+            chart.Series.Add(newSeries);
+            if (chart.Legends.Count == 0)
+            {
+                Legend legend = new Legend();
+                legend.Docking = Docking.Right;
+                chart.Legends.Add(legend);
+            }
+            chart.Titles.Clear();
+            chart.Titles.Add("Распределение по типам транспорта");
+            chart.Invalidate();
+        }
+      
+
+        private void chartTransport_LAA_Click(object sender, EventArgs e)
+        {
         }
     }
 }
