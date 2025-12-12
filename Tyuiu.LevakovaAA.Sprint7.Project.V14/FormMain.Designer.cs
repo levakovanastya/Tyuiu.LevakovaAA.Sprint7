@@ -33,27 +33,37 @@
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             panel1 = new Panel();
+            buttonSearch = new Button();
             buttonGraf = new Button();
+            groupBoxType_LAA = new GroupBox();
+            textBoxType_LAA = new TextBox();
             buttonShow_LAA = new Button();
-            buttonStatistic = new Button();
+            buttonStatistic_LAA = new Button();
             buttonSaveFile = new Button();
             buttonHelp_LAA = new Button();
-            panel2 = new Panel();
             dataGridViewRoutes_LAA = new DataGridView();
             toolTipButton_LAA = new ToolTip(components);
             openFileDialog_LAA = new OpenFileDialog();
             saveFileDialog_LAA = new OpenFileDialog();
-            chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            chartPie_LAA = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            panel3 = new Panel();
+            panel4 = new Panel();
+            splitter1 = new Splitter();
             panel1.SuspendLayout();
+            groupBoxType_LAA.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewRoutes_LAA).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)chart).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)chartPie_LAA).BeginInit();
+            panel3.SuspendLayout();
+            panel4.SuspendLayout();
             SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(buttonSearch);
             panel1.Controls.Add(buttonGraf);
+            panel1.Controls.Add(groupBoxType_LAA);
             panel1.Controls.Add(buttonShow_LAA);
-            panel1.Controls.Add(buttonStatistic);
+            panel1.Controls.Add(buttonStatistic_LAA);
             panel1.Controls.Add(buttonSaveFile);
             panel1.Controls.Add(buttonHelp_LAA);
             panel1.Dock = DockStyle.Top;
@@ -61,6 +71,16 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(1182, 109);
             panel1.TabIndex = 0;
+            // 
+            // buttonSearch
+            // 
+            buttonSearch.Location = new Point(935, 32);
+            buttonSearch.Name = "buttonSearch";
+            buttonSearch.Size = new Size(105, 38);
+            buttonSearch.TabIndex = 7;
+            buttonSearch.Text = "Найти";
+            buttonSearch.UseVisualStyleBackColor = true;
+            buttonSearch.Click += buttonSearch_Click;
             // 
             // buttonGraf
             // 
@@ -72,6 +92,23 @@
             buttonGraf.UseVisualStyleBackColor = true;
             buttonGraf.Click += buttonGraf_Click;
             // 
+            // groupBoxType_LAA
+            // 
+            groupBoxType_LAA.Controls.Add(textBoxType_LAA);
+            groupBoxType_LAA.Location = new Point(738, 22);
+            groupBoxType_LAA.Name = "groupBoxType_LAA";
+            groupBoxType_LAA.Size = new Size(189, 48);
+            groupBoxType_LAA.TabIndex = 6;
+            groupBoxType_LAA.TabStop = false;
+            groupBoxType_LAA.Text = "Тип транспорта";
+            // 
+            // textBoxType_LAA
+            // 
+            textBoxType_LAA.Location = new Point(2, 21);
+            textBoxType_LAA.Name = "textBoxType_LAA";
+            textBoxType_LAA.Size = new Size(189, 27);
+            textBoxType_LAA.TabIndex = 5;
+            // 
             // buttonShow_LAA
             // 
             buttonShow_LAA.Location = new Point(219, 22);
@@ -82,15 +119,15 @@
             buttonShow_LAA.UseVisualStyleBackColor = true;
             buttonShow_LAA.Click += buttonShow_Click;
             // 
-            // buttonStatistic
+            // buttonStatistic_LAA
             // 
-            buttonStatistic.Location = new Point(117, 22);
-            buttonStatistic.Name = "buttonStatistic";
-            buttonStatistic.Size = new Size(96, 71);
-            buttonStatistic.TabIndex = 2;
-            buttonStatistic.Text = "Статистика";
-            buttonStatistic.UseVisualStyleBackColor = true;
-            buttonStatistic.Click += buttonStatistic_Click;
+            buttonStatistic_LAA.Location = new Point(117, 22);
+            buttonStatistic_LAA.Name = "buttonStatistic_LAA";
+            buttonStatistic_LAA.Size = new Size(96, 71);
+            buttonStatistic_LAA.TabIndex = 2;
+            buttonStatistic_LAA.Text = "Статистика";
+            buttonStatistic_LAA.UseVisualStyleBackColor = true;
+            buttonStatistic_LAA.Click += buttonStatistic_Click;
             // 
             // buttonSaveFile
             // 
@@ -115,21 +152,14 @@
             buttonHelp_LAA.UseVisualStyleBackColor = true;
             buttonHelp_LAA.Click += buttonHelp_LAA_Click;
             // 
-            // panel2
-            // 
-            panel2.Dock = DockStyle.Left;
-            panel2.Location = new Point(0, 109);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(217, 537);
-            panel2.TabIndex = 1;
-            // 
             // dataGridViewRoutes_LAA
             // 
             dataGridViewRoutes_LAA.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewRoutes_LAA.Location = new Point(219, 112);
+            dataGridViewRoutes_LAA.Dock = DockStyle.Fill;
+            dataGridViewRoutes_LAA.Location = new Point(0, 0);
             dataGridViewRoutes_LAA.Name = "dataGridViewRoutes_LAA";
             dataGridViewRoutes_LAA.RowHeadersWidth = 51;
-            dataGridViewRoutes_LAA.Size = new Size(552, 373);
+            dataGridViewRoutes_LAA.Size = new Size(660, 534);
             dataGridViewRoutes_LAA.TabIndex = 0;
             // 
             // toolTipButton_LAA
@@ -144,55 +174,89 @@
             // 
             saveFileDialog_LAA.FileName = "openFileDialog2";
             // 
-            // chart
+            // chartPie_LAA
             // 
             chartArea1.Name = "ChartArea1";
-            chart.ChartAreas.Add(chartArea1);
+            chartPie_LAA.ChartAreas.Add(chartArea1);
+            chartPie_LAA.Dock = DockStyle.Fill;
             legend1.Name = "Legend1";
-            chart.Legends.Add(legend1);
-            chart.Location = new Point(776, 117);
-            chart.Name = "chart";
+            chartPie_LAA.Legends.Add(legend1);
+            chartPie_LAA.Location = new Point(4, 0);
+            chartPie_LAA.Name = "chartPie_LAA";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Pie;
             series1.Legend = "Legend1";
             series1.Name = "Series1";
-            chart.Series.Add(series1);
-            chart.Size = new Size(403, 369);
-            chart.TabIndex = 2;
-            chart.Text = "chart1";
+            chartPie_LAA.Series.Add(series1);
+            chartPie_LAA.Size = new Size(517, 536);
+            chartPie_LAA.TabIndex = 2;
+            chartPie_LAA.Text = "chart1";
+            // 
+            // panel3
+            // 
+            panel3.Controls.Add(dataGridViewRoutes_LAA);
+            panel3.Location = new Point(0, 111);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(660, 534);
+            panel3.TabIndex = 3;
+            // 
+            // panel4
+            // 
+            panel4.Controls.Add(chartPie_LAA);
+            panel4.Controls.Add(splitter1);
+            panel4.Location = new Point(660, 109);
+            panel4.Name = "panel4";
+            panel4.Size = new Size(521, 536);
+            panel4.TabIndex = 4;
+            // 
+            // splitter1
+            // 
+            splitter1.Location = new Point(0, 0);
+            splitter1.Name = "splitter1";
+            splitter1.Size = new Size(4, 536);
+            splitter1.TabIndex = 0;
+            splitter1.TabStop = false;
             // 
             // FormMain_LAA
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1182, 646);
-            Controls.Add(chart);
-            Controls.Add(dataGridViewRoutes_LAA);
-            Controls.Add(panel2);
             Controls.Add(panel1);
+            Controls.Add(panel3);
+            Controls.Add(panel4);
             Name = "FormMain_LAA";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Городской транспорт";
             Load += FormMain_LAA_Load;
             panel1.ResumeLayout(false);
+            groupBoxType_LAA.ResumeLayout(false);
+            groupBoxType_LAA.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewRoutes_LAA).EndInit();
-            ((System.ComponentModel.ISupportInitialize)chart).EndInit();
+            ((System.ComponentModel.ISupportInitialize)chartPie_LAA).EndInit();
+            panel3.ResumeLayout(false);
+            panel4.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private Panel panel1;
-        private Panel panel2;
         private Button buttonHelp_LAA;
         private ToolTip toolTipButton_LAA;
-        private Button buttonStatistic;
+        private Button buttonStatistic_LAA;
         private Button buttonSaveFile;
         private DataGridView dataGridViewRoutes_LAA;
         private Button buttonShow_LAA;
         private OpenFileDialog openFileDialog_LAA;
         private OpenFileDialog saveFileDialog_LAA;
         private Button buttonGraf;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPie_LAA;
+        private Panel panel3;
+        private Panel panel4;
+        private Splitter splitter1;
+        private GroupBox groupBoxType_LAA;
+        private TextBox textBoxType_LAA;
+        private Button buttonSearch;
     }
 }

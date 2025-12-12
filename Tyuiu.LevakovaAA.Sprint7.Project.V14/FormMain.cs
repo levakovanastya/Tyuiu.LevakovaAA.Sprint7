@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -16,8 +17,6 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
 
 
         }
-        static int rows;
-        static int colums;
         static string openFilePath;
         private void openFileDialog_LAA_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -132,34 +131,104 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
 
         private void buttonStatistic_Click(object sender, EventArgs e)
         {
-            if (dataGridViewRoutes_LAA.Rows.Count == 0)
+            if (!string.IsNullOrEmpty(textBoxType_LAA.Text))
             {
-                MessageBox.Show("Нет данных для статистики");
-                return;
-            }
-            int total = dataGridViewRoutes_LAA.Rows.Count;
-            int buses = 0;
-            int trams = 0;
-            int metro = 0;
-            foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
-            {
-                if (row.Cells[0].Value != null)
+                string searchType = textBoxType_LAA.Text.Trim().ToLower();
+
+                if (dataGridViewRoutes_LAA.Rows.Count == 0)
                 {
-                    string type = row.Cells[0].Value.ToString().ToLower();
-                    if (type.Contains("автобус")) buses++;
-                    else if (type.Contains("трамвай")) trams++;
-                    else if (type.Contains("метро")) metro++;
+                    MessageBox.Show("Нет данных для статистики");
+                    return;
                 }
+
+                int total = dataGridViewRoutes_LAA.Rows.Count;
+                int searchedCount = 0;
+                string typeName = "";
+
+                foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string type = row.Cells[0].Value.ToString().ToLower();
+
+                        if (searchType.Contains("автобус") && type.Contains("автобус"))
+                        {
+                            searchedCount++;
+                            typeName = "Автобус";
+                        }
+                        else if (searchType.Contains("трамвай") && type.Contains("трамвай"))
+                        {
+                            searchedCount++;
+                            typeName = "Трамвай";
+                        }
+                        else if (searchType.Contains("метро") && type.Contains("метро"))
+                        {
+                            searchedCount++;
+                            typeName = "Метро";
+                        }
+                        else if (searchType.Contains("маршрут") && type.Contains("маршрут"))
+                        {
+                            searchedCount++;
+                            typeName = "Маршрутка";
+                        }
+                        else if (searchType.Contains("электрич") && type.Contains("электрич"))
+                        {
+                            searchedCount++;
+                            typeName = "Электричка";
+                        }
+                    }
+                }
+
+                if (searchedCount == 0)
+                {
+                    MessageBox.Show($"Маршрутов типа '{textBoxType_LAA.Text}' не найдено");
+                    return;
+                }
+
+                string stats = $"СТАТИСТИКА: {typeName.ToUpper()}\n" +
+                              $"Всего маршрутов: {total - 1}\n\n" +
+                              $"• {typeName}: {searchedCount} ({GetPercentage(searchedCount, total)}%)\n\n" +
+                              $"Сгенерировано: {DateTime.Now:HH:mm:ss}";
+
+                MessageBox.Show(stats, $"Статистика - {typeName}", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            int others = total - buses - trams - metro;
-            string stats = "СТАТИСТИКА МАРШРУТОВ\n" +
-                           $"Всего маршрутов: {total - 1}\n\n" +
-                           $"• Автобусов: {buses} ({GetPercentage(buses, total)}%)\n" +
-                           $"• Трамваев: {trams} ({GetPercentage(trams, total)}%)\n" +
-                           $"• Метро: {metro} ({GetPercentage(metro, total)}%)\n" +
-                           $"• Других: {others} ({GetPercentage(others, total)}%)\n\n" +
-                           $"Сгенерировано: {DateTime.Now:HH:mm:ss}";
-            MessageBox.Show(stats, "Статистика", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+            {
+                if (dataGridViewRoutes_LAA.Rows.Count == 0)
+                {
+                    MessageBox.Show("Нет данных для статистики");
+                    return;
+                }
+                int total = dataGridViewRoutes_LAA.Rows.Count;
+                int buses = 0;
+                int trams = 0;
+                int metro = 0;
+                int minibuses = 0;
+                int trains = 0;
+
+                foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
+                {
+                    if (row.Cells[0].Value != null)
+                    {
+                        string type = row.Cells[0].Value.ToString().ToLower();
+                        if (type.Contains("автобус")) buses++;
+                        else if (type.Contains("трамвай")) trams++;
+                        else if (type.Contains("метро")) metro++;
+                        else if (type.Contains("маршрут")) minibuses++;
+                        else if (type.Contains("электрич")) trains++;
+                    }
+                }
+                string stats = "СТАТИСТИКА МАРШРУТОВ\n" +
+                               $"Всего маршрутов: {total - 1}\n\n" +
+                               $"• Автобусов: {buses} ({GetPercentage(buses, total)}%)\n" +
+                               $"• Трамваев: {trams} ({GetPercentage(trams, total)}%)\n" +
+                               $"• Метро: {metro} ({GetPercentage(metro, total)}%)\n" +
+                               $"• Маршруток: {minibuses} ({GetPercentage(minibuses, total)}%)\n" +
+                               $"• Электричек: {trains} ({GetPercentage(trains, total)}%)\n" +
+                               $"Сгенерировано: {DateTime.Now:HH:mm:ss}";
+
+                MessageBox.Show(stats, "Статистика", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private string GetPercentage(int count, int total)
@@ -168,79 +237,65 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
             return ((double)count / total * 100).ToString("F1");
         }
 
-        private void ShowChartFromDataGridView()
-        {
-            if (dataGridViewRoutes_LAA.Rows.Count == 0)
-            {
-                MessageBox.Show("Нет данных в таблице");
-                return;
-            }
-            Chart chart = new Chart();
-            chart.Size = new Size(500, 300);
-            chart.Location = new Point(200, 50);
-            ChartArea area = new ChartArea();
-            chart.ChartAreas.Add(area);
-            var counts = new Dictionary<string, int>();
-            foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
-            {
-                if (!row.IsNewRow && row.Cells[0].Value != null)
-                {
-                    string type = row.Cells[0].Value.ToString();
-                    if (counts.ContainsKey(type))
-                        counts[type]++;
-                    else
-                        counts[type] = 1;
-                }
-            }
-            Series series = new Series();
-            series.ChartType = SeriesChartType.Column;
 
-            foreach (var item in counts)
-            {
-                series.Points.AddXY(item.Key, item.Value);
-            }
-
-            chart.Series.Add(series);
-            this.Controls.Add(chart);
-        }
         private void buttonGraf_Click(object sender, EventArgs e)
         {
 
-            if (chart.Series.Count > 0)
+            if (dataGridViewRoutes_LAA.Rows.Count == 0)
             {
-                chart.Series.Clear();
+                MessageBox.Show("Нет данных для графика");
+                return;
             }
-            Series newSeries = new Series("TransportData");
-            newSeries.ChartType = SeriesChartType.Pie;
-            newSeries.Points.AddXY("Автобус", 2);
-            newSeries.Points.AddXY("Трамвай", 1);
-            newSeries.Points.AddXY("Маршрутка", 1);
-            newSeries.Points.AddXY("Метро", 1);
-            newSeries.Points.AddXY("Электричка", 2);
-            newSeries.IsValueShownAsLabel = true;
-            newSeries.Label = "#VALX"; 
-            newSeries.LabelForeColor = Color.White;
-            newSeries.Font = new Font("Arial", 12, FontStyle.Bold);
-            newSeries["PieLabelStyle"] = "Outside"; 
-            newSeries.Points[0].Color = Color.FromArgb(255, 99, 132);   
-            newSeries.Points[1].Color = Color.FromArgb(54, 162, 235);   
-            newSeries.Points[2].Color = Color.FromArgb(255, 205, 86);   
-            newSeries.Points[3].Color = Color.FromArgb(75, 192, 192);   
-            chart.Series.Add(newSeries);
-            if (chart.Legends.Count == 0)
+
+            // Очищаем старые данные
+            chartPie_LAA.Series.Clear();
+
+            // Подсчитываем статистику
+            int buses = 0;
+            int trams = 0;
+            int metro = 0;
+            int minibuses = 0;
+            int trains = 0;
+
+            foreach (DataGridViewRow row in dataGridViewRoutes_LAA.Rows)
             {
-                Legend legend = new Legend();
-                legend.Docking = Docking.Right;
-                chart.Legends.Add(legend);
+                if (row.Cells[0].Value != null)
+                {
+                    string type = row.Cells[0].Value.ToString().ToLower();
+                    if (type.Contains("автобус")) buses++;
+                    else if (type.Contains("трамвай")) trams++;
+                    else if (type.Contains("метро")) metro++;
+                    else if (type.Contains("маршрут")) minibuses++;
+                    else if (type.Contains("электрич")) trains++;
+                }
             }
-            chart.Titles.Clear();
-            chart.Titles.Add("Распределение по типам транспорта");
-            chart.Invalidate();
+            Series series = new Series();
+            series.ChartType = SeriesChartType.Pie;
+            series.IsValueShownAsLabel = true;
+            series.Label = "#VALX";
+
+            if (buses > 0) series.Points.AddXY("Автобусы", buses);
+            if (trams > 0) series.Points.AddXY("Трамваи", trams);
+            if (metro > 0) series.Points.AddXY("Метро", metro);
+            if (minibuses > 0) series.Points.AddXY("Маршрутки", minibuses);
+            if (trains > 0) series.Points.AddXY("Электрички", trains);
+
+            chartPie_LAA.Series.Add(series);
         }
-      
 
         private void chartTransport_LAA_Click(object sender, EventArgs e)
         {
+        }
+
+        private void buttonSearch_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBoxType_LAA.Text))
+            {
+                MessageBox.Show("Введите вид транспорта для поиска",
+                              "Поиск", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            buttonStatistic_Click(sender, e);
         }
     }
 }
