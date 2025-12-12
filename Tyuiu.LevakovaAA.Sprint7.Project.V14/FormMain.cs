@@ -246,11 +246,7 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
                 MessageBox.Show("Нет данных для графика");
                 return;
             }
-
-            // Очищаем старые данные
             chartPie_LAA.Series.Clear();
-
-            // Подсчитываем статистику
             int buses = 0;
             int trams = 0;
             int metro = 0;

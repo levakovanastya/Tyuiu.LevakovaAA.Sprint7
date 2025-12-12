@@ -74,9 +74,9 @@
             // 
             // buttonSearch
             // 
-            buttonSearch.Location = new Point(935, 32);
+            buttonSearch.Location = new Point(935, 45);
             buttonSearch.Name = "buttonSearch";
-            buttonSearch.Size = new Size(105, 38);
+            buttonSearch.Size = new Size(108, 35);
             buttonSearch.TabIndex = 7;
             buttonSearch.Text = "Найти";
             buttonSearch.UseVisualStyleBackColor = true;
@@ -95,7 +95,7 @@
             // groupBoxType_LAA
             // 
             groupBoxType_LAA.Controls.Add(textBoxType_LAA);
-            groupBoxType_LAA.Location = new Point(738, 22);
+            groupBoxType_LAA.Location = new Point(740, 32);
             groupBoxType_LAA.Name = "groupBoxType_LAA";
             groupBoxType_LAA.Size = new Size(189, 48);
             groupBoxType_LAA.TabIndex = 6;
@@ -104,7 +104,7 @@
             // 
             // textBoxType_LAA
             // 
-            textBoxType_LAA.Location = new Point(2, 21);
+            textBoxType_LAA.Location = new Point(0, 22);
             textBoxType_LAA.Name = "textBoxType_LAA";
             textBoxType_LAA.Size = new Size(189, 27);
             textBoxType_LAA.TabIndex = 5;
