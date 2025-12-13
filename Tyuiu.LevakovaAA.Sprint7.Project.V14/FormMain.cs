@@ -293,5 +293,9 @@ namespace Tyuiu.LevakovaAA.Sprint7.Project.V14
             }
             buttonStatistic_Click(sender, e);
         }
+
+        private void buttonGraf_MouseEnter(object sender, EventArgs e)
+        {
+        }
     }
 }

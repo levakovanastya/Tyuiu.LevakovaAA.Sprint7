@@ -91,6 +91,7 @@
             buttonGraf.Text = "Построить график";
             buttonGraf.UseVisualStyleBackColor = true;
             buttonGraf.Click += buttonGraf_Click;
+            buttonGraf.MouseEnter += buttonGraf_MouseEnter;
             // 
             // groupBoxType_LAA
             // 
@@ -158,6 +159,7 @@
             dataGridViewRoutes_LAA.Dock = DockStyle.Fill;
             dataGridViewRoutes_LAA.Location = new Point(0, 0);
             dataGridViewRoutes_LAA.Name = "dataGridViewRoutes_LAA";
+            dataGridViewRoutes_LAA.RowHeadersVisible = false;
             dataGridViewRoutes_LAA.RowHeadersWidth = 51;
             dataGridViewRoutes_LAA.Size = new Size(660, 534);
             dataGridViewRoutes_LAA.TabIndex = 0;
